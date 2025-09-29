@@ -25,7 +25,7 @@ export default function AdminDashboard() {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:3000/api/v1/Product/getallproduct");
+      const res = await axios.get("https://backend-api-1-m4ak.onrender.com/api/v1/Product/getallproduct");
       setProducts(res.data);
     } catch (err) {
       console.error(err);
@@ -70,7 +70,7 @@ const handleCreate = async (e) => {
     if (form.imageFile) fd.append("image", form.imageFile);
 
     const res = await axios.post(
-      "http://localhost:3000/api/v1/Product/createproduct",
+      "https://backend-api-1-m4ak.onrender.com/api/v1/Product/createproduct",
       fd
     );
 
@@ -128,7 +128,7 @@ const handleCreate = async (e) => {
       if (form.imageFile) fd.append("image", form.imageFile);
 
       // Use PUT with multipart if backend accepts; else send JSON (adjust accordingly)
-      await axios.put(`http://localhost:3000/api/v1/Product/updateProduct/${editingProduct._id}`, fd, {
+      await axios.put(`https://backend-api-1-m4ak.onrender.com/api/v1/Product/updateProduct/${editingProduct._id}`, fd, {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
       });
@@ -148,7 +148,7 @@ const handleCreate = async (e) => {
     if (!confirm("Delete this product?")) return;
     try {
       await axios.delete(
-        `http://localhost:3000/api/v1/Product/deleteProduct/${id}`,
+        `https://backend-api-1-m4ak.onrender.com/api/v1/Product/deleteProduct/${id}`,
         {
           withCredentials: true,
         }

@@ -10,7 +10,7 @@ const Product_detail_page = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/api/v1/Product/getsingleproduct/${id}`);
+        const res = await axios.get(`https://backend-api-1-m4ak.onrender.com/api/v1/Product/getsingleproduct/${id}`);
         setProduct(res.data);
       } catch (err) {
         console.error(err);

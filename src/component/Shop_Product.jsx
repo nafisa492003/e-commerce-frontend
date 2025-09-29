@@ -18,7 +18,7 @@ const Shop_Product = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/v1/Product/getallproduct");
+        const res = await axios.get("https://backend-api-1-m4ak.onrender.com/api/v1/Product/getallproduct");
         setProducts(res.data);
         const uniqueCategories = [
           ...new Set(res.data.map((product) => product.category?.name || product.category))

@@ -14,7 +14,7 @@ const Cloths = () => {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const data = await axios.get("http://localhost:3000/api/v1/Product/getallproduct")
+      const data = await axios.get("https://backend-api-1-m4ak.onrender.com/api/v1/Product/getallproduct")
       setProducts(data.data)
     }
     fetchProduct()
