@@ -50,51 +50,55 @@ export default function AdminDashboard() {
   };
 
   // Create product (multipart/form-data)
-const handleCreate = async (e) => {
-  e.preventDefault();
+  const handleCreate = async (e) => {
+    e.preventDefault();
 
-  if (!form.name || !form.description || !form.price || !form.category) {
-    toast.error("Please fill all required fields", { position: "top-center" });
-    return;
-  }
+    if (!form.name || !form.description || !form.price || !form.category) {
+      toast.error("Please fill all required fields", { position: "top-center" });
+      return;
+    }
 
-  try {
-    const fd = new FormData();
-    fd.append("name", form.name.trim());
-    fd.append("description", form.description.trim());
-    fd.append("price", form.price.trim()); // as string
-    fd.append("color", form.color?.trim() || "");
-    fd.append("category", form.category);
-    fd.append("subcategory", form.subcategory || "");
+    try {
+      const fd = new FormData();
+      fd.append("name", form.name.trim());
+      fd.append("description", form.description.trim());
+      fd.append("price", form.price.trim());
+      fd.append("color", form.color?.trim() || "");
+      fd.append("category", form.category);
+      fd.append("subcategory", form.subcategory || "");
 
-    if (form.imageFile) fd.append("image", form.imageFile);
+      if (form.imageFile) fd.append("image", form.imageFile);
 
-    const res = await axios.post(
-      "https://backend-api-1-m4ak.onrender.com/api/v1/Product/createproduct",
-      fd
-    );
+      const res = await axios.post(
+        "https://backend-api-1-m4ak.onrender.com/api/v1/Product/createproduct",
+        fd,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true,
+        }
+      );
 
-    toast.success("Product created successfully!", { position: "top-center" });
+      toast.success("Product created successfully!", { position: "top-center" });
 
-    setForm({
-      name: "",
-      description: "",
-      price: "",
-      color: "",
-      category: "",
-      subcategory: "",
-      imageFile: null,
-    });
+      setForm({
+        name: "",
+        description: "",
+        price: "",
+        color: "",
+        category: "",
+        subcategory: "",
+        imageFile: null,
+      });
 
-    setShowCreate(false);
-    fetchProducts();
-  } catch (err) {
-    console.error("Create Product Error:", err.response?.data || err);
-    toast.error(err.response?.data?.error || "Failed to create product", {
-      position: "top-center",
-    });
-  }
-};
+      setShowCreate(false);
+      fetchProducts();
+    } catch (err) {
+      console.error("Create Product Error:", err.response?.data || err);
+      toast.error(err.response?.data?.error || "Failed to create product", {
+        position: "top-center",
+      });
+    }
+  };
 
 
 
@@ -205,7 +209,7 @@ const handleCreate = async (e) => {
             <input name="color" placeholder="Color" value={form.color} onChange={handleChange} className="w-full mb-2 p-2 border rounded" />
             <input name="category" placeholder="CategoryId or Name" value={form.category} onChange={handleChange} className="w-full mb-2 p-2 border rounded" />
             <input name="subcategory" placeholder="SubcategoryId or Name" value={form.subcategory} onChange={handleChange} className="w-full mb-2 p-2 border rounded" />
-           <input type="file" onChange={(e) => setForm({ ...form, imageFile: e.target.files[0] })} className="mb-4"/>
+            <input type="file" onChange={(e) => setForm({ ...form, imageFile: e.target.files[0] })} className="mb-4" />
 
 
             <div className="flex gap-3">
