@@ -49,26 +49,26 @@ export default function AdminDashboard() {
     }
   };
 
-  // Create product (multipart/form-data)
- const handleCreate = async (e) => {
+ // Create product (multipart/form-data)
+const handleCreate = async (e) => {
   e.preventDefault();
 
   try {
-    const fd = new FormData();
-    fd.append("name", form.name);
-    fd.append("description", form.description);
-    fd.append("price", form.price);
-    fd.append("color", form.color);
-    fd.append("category", form.category); 
-    fd.append("subcategory", form.subcategory);
+    const formData = new FormData();
+    formData.append("name", form.name);
+    formData.append("description", form.description);
+    formData.append("price", form.price);
+    formData.append("color", form.color);
+    formData.append("category", form.category);
+    if (form.subcategory) formData.append("subcategory", form.subcategory);
+    if (form.imageFile) formData.append("image", form.imageFile);
 
-    if (form.imageFile) fd.append("image", form.imageFile);
-
-    for (let [k, v] of fd.entries()) console.log(k, v);
+    // Debug log
+    for (let [k, v] of formData.entries()) console.log(k, v);
 
     const res = await axios.post(
       "https://backend-api-1-m4ak.onrender.com/api/v1/Product/createproduct",
-      fd,
+      formData,
       {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
@@ -78,11 +78,22 @@ export default function AdminDashboard() {
     toast.success("Product created successfully!");
     fetchProducts();
     setShowCreate(false);
+    setForm({
+      name: "",
+      description: "",
+      price: "",
+      color: "",
+      category: "",
+      subcategory: "",
+      imageFile: null,
+    }); 
   } catch (err) {
     console.error("Create Product Error:", err.response?.data || err.message);
     toast.error(err.response?.data?.error || "Failed to create product");
   }
 };
+
+
 
 
 
