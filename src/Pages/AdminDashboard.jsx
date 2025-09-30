@@ -50,55 +50,39 @@ export default function AdminDashboard() {
   };
 
   // Create product (multipart/form-data)
-  const handleCreate = async (e) => {
-    e.preventDefault();
+ const handleCreate = async (e) => {
+  e.preventDefault();
 
-    if (!form.name || !form.description || !form.price || !form.category) {
-      toast.error("Please fill all required fields", { position: "top-center" });
-      return;
-    }
+  try {
+    const fd = new FormData();
+    fd.append("name", form.name);
+    fd.append("description", form.description);
+    fd.append("price", form.price);
+    fd.append("color", form.color);
+    fd.append("category", form.category); 
+    fd.append("subcategory", form.subcategory);
 
-    try {
-      const fd = new FormData();
-      fd.append("name", form.name.trim());
-      fd.append("description", form.description.trim());
-      fd.append("price", form.price.trim());
-      fd.append("color", form.color?.trim() || "");
-      fd.append("category", form.category);
-      fd.append("subcategory", form.subcategory || "");
+    if (form.imageFile) fd.append("image", form.imageFile);
 
-      if (form.imageFile) fd.append("image", form.imageFile);
+    for (let [k, v] of fd.entries()) console.log(k, v);
 
-      const res = await axios.post(
-        "https://backend-api-1-m4ak.onrender.com/api/v1/Product/createproduct",
-        fd,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-          withCredentials: true,
-        }
-      );
+    const res = await axios.post(
+      "https://backend-api-1-m4ak.onrender.com/api/v1/Product/createproduct",
+      fd,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+        withCredentials: true,
+      }
+    );
 
-      toast.success("Product created successfully!", { position: "top-center" });
-
-      setForm({
-        name: "",
-        description: "",
-        price: "",
-        color: "",
-        category: "",
-        subcategory: "",
-        imageFile: null,
-      });
-
-      setShowCreate(false);
-      fetchProducts();
-    } catch (err) {
-      console.error("Create Product Error:", err.response?.data || err);
-      toast.error(err.response?.data?.error || "Failed to create product", {
-        position: "top-center",
-      });
-    }
-  };
+    toast.success("Product created successfully!");
+    fetchProducts();
+    setShowCreate(false);
+  } catch (err) {
+    console.error("Create Product Error:", err.response?.data || err.message);
+    toast.error(err.response?.data?.error || "Failed to create product");
+  }
+};
 
 
 
